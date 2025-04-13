@@ -264,6 +264,116 @@ export function CertificatesSection() {
     hackathon: "bg-pink-500/10 text-pink-400",
   };
 
+  // Function to render a certificate card
+  const renderCertificateCard = (certificate: Certificate) => (
+    <motion.div
+      key={certificate.id}
+      variants={itemVariants}
+      className="bg-slate-900/60 border border-slate-800 rounded-lg p-6 flex flex-col justify-between hover:border-slate-700 transition-colors"
+    >
+      <div>
+        <div className={`inline-block px-3 py-1 rounded-full text-xs font-medium mb-3 ${categoryColors[certificate.category]}`}>
+          {certificate.category.replace("-", " ").charAt(0).toUpperCase() +
+            certificate.category.replace("-", " ").slice(1)}
+        </div>
+        <h3 className="text-lg font-semibold mb-2 text-slate-100">
+          {certificate.title}
+        </h3>
+        <p className="text-slate-300 mb-1">{certificate.organization}</p>
+        <p className="text-slate-400 text-sm mb-3">{formatDate(certificate.date)}</p>
+
+        {certificate.credentialId && (
+          <p className="text-xs text-slate-500 mb-2">
+            Credential ID: {certificate.credentialId}
+          </p>
+        )}
+
+        {certificate.skills && (
+          <div className="mt-2 flex flex-wrap gap-2">
+            {certificate.skills.map((skill, index) => (
+              <span key={index} className="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">
+                {skill}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+      {certificate.link && (
+        <div className="mt-4">
+          <Button asChild variant="outline" size="sm">
+            <Link href={certificate.link} target="_blank">
+              View <ExternalLink className="ml-2 h-3 w-3" />
+            </Link>
+          </Button>
+        </div>
+      )}
+    </motion.div>
+  );
+
+  // Function to render hackathon certificates in a linear format
+  const renderHackathonCertificates = (hackathonCertificates: Certificate[]) => (
+    <div className="bg-slate-900/60 border border-slate-800 rounded-lg p-8">
+      <h3 className="text-xl font-semibold mb-6 text-slate-100 border-b border-slate-800 pb-4">
+        Hackathon Participation & Achievements
+      </h3>
+      <div className="relative">
+        {/* Vertical timeline line */}
+        <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-blue-500/30 ml-3"></div>
+
+        <div className="space-y-8">
+          {hackathonCertificates.map((certificate) => (
+            <motion.div
+              key={certificate.id}
+              variants={itemVariants}
+              className="flex items-start ml-2"
+            >
+              {/* Timeline dot */}
+              <div className="relative">
+                <div className="h-6 w-6 rounded-full border-2 border-blue-500 bg-slate-950 flex items-center justify-center -ml-3">
+                  <div className="h-2 w-2 rounded-full bg-blue-500"></div>
+                </div>
+              </div>
+
+              <div className="ml-6 flex-grow">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-1">
+                  <h4 className="text-base font-medium text-slate-100">{certificate.title}</h4>
+                  <span className="text-sm text-slate-400">{formatDate(certificate.date)}</span>
+                </div>
+                <p className="text-sm text-slate-300 mb-2">{certificate.organization}</p>
+
+                {certificate.credentialId && (
+                  <p className="text-xs text-slate-500 mb-2">
+                    Credential ID: {certificate.credentialId}
+                  </p>
+                )}
+
+                {certificate.skills && (
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {certificate.skills.map((skill, index) => (
+                      <span key={index} className="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {certificate.link && (
+                  <div className="mt-3">
+                    <Button asChild variant="outline" size="sm">
+                      <Link href={certificate.link} target="_blank">
+                        View Certificate <ExternalLink className="ml-2 h-3 w-3" />
+                      </Link>
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <section id="certificates" className="py-20 bg-slate-950">
       <div className="container mx-auto px-4">
@@ -286,6 +396,8 @@ export function CertificatesSection() {
           </motion.p>
         </div>
 
+        <h2 className="text-2xl font-bold text-center mb-8 text-slate-100">My Certificates</h2>
+
         <Tabs defaultValue="all" className="max-w-6xl mx-auto">
           <TabsList className="grid w-full grid-cols-6 mb-8">
             <TabsTrigger value="all">All</TabsTrigger>
@@ -303,111 +415,39 @@ export function CertificatesSection() {
               ref={ref}
               variants={containerVariants}
               initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
+              whileInView="visible"
+              viewport={{ once: false, amount: 0.1 }}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
-              {certificates.map((certificate) => (
-                <motion.div
-                  key={certificate.id}
-                  variants={itemVariants}
-                  className="bg-slate-900/60 border border-slate-800 rounded-lg p-6 flex flex-col justify-between hover:border-slate-700 transition-colors"
-                >
-                  <div>
-                    <div className={`inline-block px-3 py-1 rounded-full text-xs font-medium mb-3 ${categoryColors[certificate.category]}`}>
-                      {certificate.category.replace("-", " ").charAt(0).toUpperCase() +
-                        certificate.category.replace("-", " ").slice(1)}
-                    </div>
-                    <h3 className="text-lg font-semibold mb-2 text-slate-100">
-                      {certificate.title}
-                    </h3>
-                    <p className="text-slate-300 mb-1">{certificate.organization}</p>
-                    <p className="text-slate-400 text-sm mb-3">{formatDate(certificate.date)}</p>
-
-                    {certificate.credentialId && (
-                      <p className="text-xs text-slate-500 mb-2">
-                        Credential ID: {certificate.credentialId}
-                      </p>
-                    )}
-
-                    {certificate.skills && (
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        {certificate.skills.map((skill, index) => (
-                          <span key={index} className="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  {certificate.link && (
-                    <div className="mt-4">
-                      <Button asChild variant="outline" size="sm">
-                        <Link href={certificate.link} target="_blank">
-                          View <ExternalLink className="ml-2 h-3 w-3" />
-                        </Link>
-                      </Button>
-                    </div>
-                  )}
-                </motion.div>
-              ))}
+              {certificates.map(renderCertificateCard)}
             </motion.div>
           </TabsContent>
 
-          {/* Filtered Certificates */}
-          {["research", "industry", "course", "open-source", "conference", "hackathon"].map((category) => (
+          {/* Hackathon Certificates in Timeline Format */}
+          <TabsContent value="hackathon">
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: false, amount: 0.1 }}
+            >
+              {renderHackathonCertificates(certificates.filter(cert => cert.category === "hackathon"))}
+            </motion.div>
+          </TabsContent>
+
+          {/* Filtered Certificates for other categories */}
+          {["research", "industry", "course", "open-source", "conference"].map((category) => (
             <TabsContent key={category} value={category}>
               <motion.div
                 variants={containerVariants}
                 initial="hidden"
-                animate="visible"
+                whileInView="visible"
+                viewport={{ once: false, amount: 0.1 }}
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
               >
                 {certificates
                   .filter((certificate) => certificate.category === category)
-                  .map((certificate) => (
-                    <motion.div
-                      key={certificate.id}
-                      variants={itemVariants}
-                      className="bg-slate-900/60 border border-slate-800 rounded-lg p-6 flex flex-col justify-between hover:border-slate-700 transition-colors"
-                    >
-                      <div>
-                        <div className={`inline-block px-3 py-1 rounded-full text-xs font-medium mb-3 ${categoryColors[certificate.category]}`}>
-                          {certificate.category.replace("-", " ").charAt(0).toUpperCase() +
-                            certificate.category.replace("-", " ").slice(1)}
-                        </div>
-                        <h3 className="text-lg font-semibold mb-2 text-slate-100">
-                          {certificate.title}
-                        </h3>
-                        <p className="text-slate-300 mb-1">{certificate.organization}</p>
-                        <p className="text-slate-400 text-sm mb-3">{formatDate(certificate.date)}</p>
-
-                        {certificate.credentialId && (
-                          <p className="text-xs text-slate-500 mb-2">
-                            Credential ID: {certificate.credentialId}
-                          </p>
-                        )}
-
-                        {certificate.skills && (
-                          <div className="mt-2 flex flex-wrap gap-2">
-                            {certificate.skills.map((skill, index) => (
-                              <span key={index} className="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">
-                                {skill}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                      {certificate.link && (
-                        <div className="mt-4">
-                          <Button asChild variant="outline" size="sm">
-                            <Link href={certificate.link} target="_blank">
-                              View <ExternalLink className="ml-2 h-3 w-3" />
-                            </Link>
-                          </Button>
-                        </div>
-                      )}
-                    </motion.div>
-                  ))}
+                  .map(renderCertificateCard)}
               </motion.div>
             </TabsContent>
           ))}

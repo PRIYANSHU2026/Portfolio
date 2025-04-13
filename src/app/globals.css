@@ -39,10 +39,38 @@
   * {
     @apply border-border;
   }
-  body {
+
+  html, body {
     @apply bg-background text-foreground;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
   }
 
+  /* Setting proper font size for better auto scaling */
+  html {
+    font-size: 16px; /* Base font size */
+  }
+
+  @media (max-width: 640px) {
+    html {
+      font-size: 14px; /* Smaller font size on mobile */
+    }
+  }
+
+  @media (min-width: 2000px) {
+    html {
+      font-size: 18px; /* Larger font size on very large screens */
+    }
+  }
+
+  /* Improve image rendering */
+  img, svg {
+    @apply max-w-full h-auto;
+  }
+
+  /* Scrollbar customization */
   ::-webkit-scrollbar {
     width: 10px;
   }
@@ -58,6 +86,16 @@
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-slate-600;
   }
+
+  /* Improve focus states for accessibility */
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+
+  /* Disable tap highlight on mobile */
+  a, button {
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 
 /* Animation keyframes */
@@ -70,5 +108,26 @@
   }
   100% {
     transform: translateY(0px);
+  }
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Improved container sizing for content sections */
+@layer components {
+  .section-container {
+    @apply container mx-auto px-4 md:px-6 max-w-7xl;
   }
 }

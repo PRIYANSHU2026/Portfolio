@@ -69,8 +69,8 @@ export function Header() {
 
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <Button asChild>
-            <Link href="/images/PRIYANSHU_TIWARI.pdf" target="_blank">
-              Resume
+            <Link href="/images/PRIYANSHU_TIWARI.pdf" target="_blank" download>
+              Download CV
             </Link>
           </Button>
         </div>
@@ -115,8 +115,8 @@ export function Header() {
                 </div>
                 <div className="py-6">
                   <Button asChild className="w-full">
-                    <Link href="/images/PRIYANSHU_TIWARI.pdf" target="_blank">
-                      Resume
+                    <Link href="/images/PRIYANSHU_TIWARI.pdf" target="_blank" download>
+                      Download CV
                     </Link>
                   </Button>
                 </div>

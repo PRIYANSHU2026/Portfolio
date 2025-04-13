@@ -1,21 +1,25 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function ClientBody({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // Remove any extension-added classes during hydration
+  // Add state to track if component is mounted
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Only apply client-side classes after hydration
   useEffect(() => {
-    // This runs only on the client after hydration
-    document.body.className = "antialiased";
+    setIsMounted(true);
+    // Remove any extension-added classes during hydration
+    document.body.className = "";
   }, []);
 
-  return (
-    <body className="antialiased" suppressHydrationWarning>
-      {children}
-    </body>
-  );
+  if (!isMounted) {
+    return <body suppressHydrationWarning>{children}</body>;
+  }
+
+  return <body className="antialiased" suppressHydrationWarning>{children}</body>;
 }

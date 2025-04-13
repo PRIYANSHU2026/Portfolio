@@ -13,6 +13,7 @@ export function formatDate(date: Date): string {
   }).format(date);
 }
 
-export const EMAIL_SERVICE_ID = "service_id"; // Replace with your emailjs service ID
-export const EMAIL_TEMPLATE_ID = "template_id"; // Replace with your emailjs template ID
-export const EMAIL_PUBLIC_KEY = "public_key"; // Replace with your emailjs public key
+// EmailJS configuration
+export const EMAIL_SERVICE_ID = "service_1yp0s0p"; // Replace with your actual EmailJS service ID
+export const EMAIL_TEMPLATE_ID = "template_98z1zbo"; // Replace with your actual EmailJS template ID
+export const EMAIL_PUBLIC_KEY = "m5rN2OXaYfm5HvQ23"; // Replace with your actual EmailJS public key

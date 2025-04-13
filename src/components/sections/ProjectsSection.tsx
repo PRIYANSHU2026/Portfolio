@@ -1,12 +1,12 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView, useMotionTemplate, useMotionValue } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
+import { ExternalLink, Code2 } from "lucide-react";
 
 interface ProjectTag {
   name: string;
@@ -19,6 +19,7 @@ interface Project {
   description: string;
   image: string;
   tags: ProjectTag[];
+  technologies?: string[];
   github: string;
   demo?: string;
 }
@@ -36,6 +37,7 @@ const projects: Project[] = [
       { name: "Deep Learning", color: "bg-purple-500" },
       { name: "Healthcare", color: "bg-green-500" },
     ],
+    technologies: ["Python", "TensorFlow", "OpenCV", "scikit-learn", "Keras"],
     github: "https://github.com/PRIYANSHU2026/DENTAL-X-RAY.git",
   },
   {
@@ -50,6 +52,7 @@ const projects: Project[] = [
       { name: "Predictive Models", color: "bg-yellow-500" },
       { name: "Data Science", color: "bg-purple-500" },
     ],
+    technologies: ["Python", "scikit-learn", "NumPy", "Pandas", "Matplotlib"],
     github: "https://github.com/PRIYANSHU2026/combinational-health-model.git",
   },
   {
@@ -64,6 +67,7 @@ const projects: Project[] = [
       { name: "Mesa Framework", color: "bg-green-500" },
       { name: "Traffic Simulation", color: "bg-yellow-500" },
     ],
+    technologies: ["Python", "Mesa", "OSMnx", "NetworkX", "Matplotlib", "GeoPandas"],
     github: "https://github.com/PRIYANSHU2026/Traffic-Congetion-.git",
   },
   {
@@ -78,6 +82,7 @@ const projects: Project[] = [
       { name: "CBCT", color: "bg-purple-500" },
       { name: "Python", color: "bg-yellow-500" },
     ],
+    technologies: ["Python", "VTK", "PyQt5", "SimpleITK", "NumPy", "Matplotlib"],
     github: "https://github.com/PRIYANSHU2026/3D-dental-impantation-project.git",
   },
   {
@@ -92,6 +97,7 @@ const projects: Project[] = [
       { name: "CNN", color: "bg-purple-500" },
       { name: "Disease Detection", color: "bg-red-500" },
     ],
+    technologies: ["Python", "TensorFlow", "Keras", "OpenCV", "NumPy", "Pandas"],
     github: "https://github.com/PRIYANSHU2026/Project-AIML.git",
   },
   {
@@ -106,13 +112,14 @@ const projects: Project[] = [
       { name: "Manufacturing", color: "bg-orange-500" },
       { name: "Predictive Modeling", color: "bg-yellow-500" },
     ],
+    technologies: ["Python", "TensorFlow", "scikit-learn", "Pandas", "NumPy", "Matplotlib"],
     github: "https://github.com/PRIYANSHU2026/APPLICATION-OF-AI-STIR-FRICTION-WELDING-.git",
   },
   {
     id: 7,
     title: "Hedging of Financial Derivatives",
     description:
-      "Open Source project with 200+ implementations based on machine learning and deep learning in financial analytics, stock prediction, and real estate prediction, including web applications.",
+      "Open Source project with 200+ implementations based on machine learning and deep learning in financial analytics, stock prediction, and real estate prediction.",
     image: "/images/projects/Finance.jpg",
     tags: [
       { name: "Financial ML", color: "bg-green-500" },
@@ -120,6 +127,7 @@ const projects: Project[] = [
       { name: "Web Apps", color: "bg-purple-500" },
       { name: "Open Source", color: "bg-yellow-500" },
     ],
+    technologies: ["Python", "TensorFlow", "Keras", "NumPy", "Pandas", "Flask", "React"],
     github: "https://github.com/PRIYANSHU2026/Hedging-of-Financial-Derivatives.git",
   },
   {
@@ -134,13 +142,14 @@ const projects: Project[] = [
       { name: "Text Summarization", color: "bg-green-500" },
       { name: "Research", color: "bg-red-500" },
     ],
+    technologies: ["Python", "PyTorch", "Transformers", "BERT", "ROUGE", "BLEU", "Hugging Face"],
     github: "https://github.com/PRIYANSHU2026/Transformer-Summarization.git",
   },
-   {
-    id: 8,
-    title: "Transformer-Based Text Summarization",
+  {
+    id: 9,
+    title: "High-Frequency Amplifier Optimization",
     description:
-      "Research project at DRDO-MTRDC focused on the development and enhancement of high-frequency amplifiers by integrating Deep Learning techniques for performance optimization. Additionally, collaborated on a research paper under the esteemed guidance of Dr. Anurag Srivastava, Scientist 'F' and Deputy Director of the Cathode Department at MTRDC, contributing to advancements in defense-grade amplifier technology.",
+      "Research project at DRDO-MTRDC focused on the development and enhancement of high-frequency amplifiers by integrating Deep Learning techniques for performance optimization.",
     image: "/images/projects/20220302113914_210418-Figure-1.webp",
     tags: [
       { name: "Python", color: "bg-blue-500" },
@@ -148,115 +157,80 @@ const projects: Project[] = [
       { name: "FNN", color: "bg-green-500" },
       { name: "Research", color: "bg-red-500" },
     ],
+    technologies: ["Python", "TensorFlow", "Keras", "NumPy", "SciPy", "Matplotlib"],
     github: "https://github.com/PRIYANSHU2026/Transformer-Summarization.git",
   },
 ];
 
-// Card component with 3D hover effect
+// Project card component
 function ProjectCard({ project }: { project: Project }) {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
-    const { left, top, width, height } = currentTarget.getBoundingClientRect();
-    mouseX.set(clientX - left);
-    mouseY.set(clientY - top);
-  }
-
-  const rotateX = useMotionTemplate`calc(${mouseY} / 20 - 15deg)`;
-  const rotateY = useMotionTemplate`calc((${mouseX} - 100) / 20deg)`;
-  const translateZ = useMotionTemplate`perspective(1000px)`;
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 20 }}
-      className="h-full"
-      style={{
-        transformStyle: "preserve-3d",
-      }}
-      whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: false, amount: 0.1 }}
+      transition={{ duration: 0.5 }}
+      className="group h-full"
     >
-      <motion.div
-        onMouseMove={handleMouseMove}
-        className="relative h-full rounded-xl bg-slate-800/60 border border-slate-700 overflow-hidden flex flex-col transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 group"
-        style={{
-          transform: `${translateZ} rotateX(${rotateX}) rotateY(${rotateY})`,
-          transformStyle: "preserve-3d",
-        }}
-      >
-        {/* Glowing gradient background effect */}
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-indigo-500/10 blur-xl" />
-        </div>
-
-        {/* Floating sparkle effects */}
-        <div className="absolute top-1/3 right-10 w-2 h-2 rounded-full bg-blue-400/70 animate-ping hidden group-hover:block" />
-        <div className="absolute bottom-1/3 left-10 w-1 h-1 rounded-full bg-purple-400/70 animate-ping hidden group-hover:block animation-delay-700" />
-
-        <div className="relative h-56 w-full overflow-hidden">
-          <Image
-            src={project.image}
-            alt={project.title}
-            fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            style={{ transformStyle: "preserve-3d", transform: "translateZ(20px)" }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        </div>
-
-        <CardContent className="p-6 flex-grow">
-          <motion.h3
-            className="text-xl font-semibold mb-2 text-slate-100"
-            style={{ transformStyle: "preserve-3d", transform: "translateZ(30px)" }}
-          >
-            {project.title}
-          </motion.h3>
-
-          <motion.p
-            className="text-slate-300 mb-4"
-            style={{ transformStyle: "preserve-3d", transform: "translateZ(25px)" }}
-          >
-            {project.description}
-          </motion.p>
-
-          <div className="flex flex-wrap gap-2 mt-4" style={{ transformStyle: "preserve-3d", transform: "translateZ(15px)" }}>
-            {project.tags.map((tag) => (
-              <span
-                key={`${project.id}-${tag.name}`}
-                className={`${tag.color} bg-opacity-20 text-xs px-2.5 py-0.5 rounded-full text-white border border-opacity-20 ${tag.color.replace('bg-', 'border-')}`}
-              >
-                {tag.name}
-              </span>
-            ))}
+      <div className="bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden flex flex-col h-full transition-all duration-300 hover:border-blue-500/40 hover:shadow-lg hover:shadow-blue-500/10 group-hover:translate-y-[-4px]">
+        {/* Image container with perfect square aspect ratio */}
+        <div className="relative w-full pt-[100%] overflow-hidden">
+          <div className="absolute inset-0 rounded-t-2xl overflow-hidden">
+            <Image
+              src={project.image}
+              alt={project.title}
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-110"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           </div>
-        </CardContent>
 
-        <CardFooter className="p-6 pt-0 flex gap-3" style={{ transformStyle: "preserve-3d", transform: "translateZ(30px)" }}>
-          <Button asChild variant="outline" size="sm" className="bg-slate-900/50 border-slate-700">
-            <Link href={project.github} target="_blank">
-              <FaGithub className="mr-2 h-4 w-4" />
-              GitHub
-            </Link>
-          </Button>
+          {/* Overlay content on hover */}
+          <div className="absolute bottom-0 left-0 right-0 p-5 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+            <h4 className="text-sm font-semibold text-slate-200 mb-2">Technologies:</h4>
+            <div className="flex flex-wrap gap-2 mb-2">
+              {project.tags.map((tag) => (
+                <span
+                  key={`${project.id}-${tag.name}`}
+                  className={`${tag.color} bg-opacity-30 text-xs px-2 py-0.5 rounded-full text-white border border-opacity-20 ${tag.color.replace('bg-', 'border-')}`}
+                >
+                  {tag.name}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
 
-          {project.demo && project.demo !== "#" && (
-            <Button asChild size="sm">
-              <Link href={project.demo} target="_blank">
-                Demo
+        {/* Content section */}
+        <div className="p-5 flex-grow flex flex-col">
+          <h3 className="text-lg font-semibold mb-2 text-slate-100 line-clamp-2">
+            {project.title}
+          </h3>
+
+          <p className="text-slate-300 text-sm mb-4 line-clamp-3 flex-grow">
+            {project.description}
+          </p>
+
+          <div className="flex gap-3 mt-auto">
+            <Button asChild variant="outline" size="sm" className="bg-slate-950/50 border-slate-800 w-full">
+              <Link href={project.github} target="_blank">
+                <FaGithub className="mr-2 h-4 w-4" />
+                Code
               </Link>
             </Button>
-          )}
 
-          <Button asChild variant="ghost" size="sm" className="ml-auto text-blue-400 hover:text-blue-300">
-            <Link href={project.demo && project.demo !== "#" ? project.demo : project.github} target="_blank">
-              View Project
-            </Link>
-          </Button>
-        </CardFooter>
-      </motion.div>
+            {project.demo && project.demo !== "#" ? (
+              <Button asChild size="sm" className="w-full bg-blue-600 hover:bg-blue-700">
+                <Link href={project.demo} target="_blank">
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                  Demo
+                </Link>
+              </Button>
+            ) : null}
+          </div>
+        </div>
+      </div>
     </motion.div>
   );
 }
@@ -265,19 +239,8 @@ export function ProjectsSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: false, amount: 0.1 });
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
   return (
-    <section id="projects" className="py-20 bg-slate-900 overflow-hidden">
+    <section id="projects" className="py-20 bg-slate-950 overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <motion.h2
@@ -299,17 +262,16 @@ export function ProjectsSection() {
           </motion.p>
         </div>
 
-        <motion.div
+        <h2 className="text-2xl font-bold text-center mb-8 text-slate-100">My Projects</h2>
+
+        <div
           ref={ref}
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
         >
           {projects.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
