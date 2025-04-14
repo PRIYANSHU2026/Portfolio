@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  output: 'export', // Adding output: 'export' will create a static export which works well with Vercel
+  distDir: 'out',
   images: {
     unoptimized: true,
     domains: [
