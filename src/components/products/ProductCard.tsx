@@ -7,7 +7,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
 import type { Product } from "@/lib/types";
-import { Eye, ShoppingCart } from "lucide-react";
+import { Eye } from "lucide-react";
 
 interface ProductCardProps {
   product: Product;
@@ -33,10 +33,6 @@ export function ProductCard({ product }: ProductCardProps) {
               <span className="sr-only">Quick view</span>
             </Button>
           </Link>
-          <Button size="icon" variant="secondary" className="rounded-full bg-red-600 hover:bg-red-700 shadow-md">
-            <ShoppingCart className="h-4 w-4 text-white" />
-            <span className="sr-only">Add to cart</span>
-          </Button>
         </div>
       </div>
       <CardContent className="flex-grow pt-4">
@@ -50,10 +46,7 @@ export function ProductCard({ product }: ProductCardProps) {
           {product.category} - {product.subcategory}
         </p>
       </CardContent>
-      <CardFooter className="pt-0 flex justify-between items-center">
-        <div className="font-semibold text-lg text-red-600">
-          {formatPrice(product.price)}
-        </div>
+      <CardFooter className="pt-0 flex justify-center items-center">
         <motion.div
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
