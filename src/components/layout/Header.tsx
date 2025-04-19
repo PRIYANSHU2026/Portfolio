@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Phone, Search, Menu, X } from "lucide-react";
+import { Phone, Search, ShoppingCart, Menu, X } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -108,8 +108,8 @@ export function Header() {
             </Link>
           </nav>
 
-          {/* Search */}
-          <div className="flex items-center">
+          {/* Search and Cart */}
+          <div className="flex items-center space-x-4">
             <div className={`relative ${isSearchOpen ? "w-60" : "w-10"} transition-all duration-300 ease-in-out`}>
               <div
                 className={`absolute inset-y-0 right-0 flex items-center pr-3 ${isSearchOpen ? "cursor-pointer" : "hidden"}`}
@@ -128,11 +128,22 @@ export function Header() {
                 onClick={() => setIsSearchOpen(true)}
               />
             </div>
+            <Link href="/cart">
+              <div className="relative">
+                <ShoppingCart
+                  size={20}
+                  className="text-gray-600 hover:text-red-600 transition-colors"
+                />
+                <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-bounce">
+                  0
+                </span>
+              </div>
+            </Link>
 
             {/* Mobile menu */}
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden ml-4">
+                <Button variant="ghost" size="icon" className="md:hidden">
                   <Menu className="h-5 w-5" />
                   <span className="sr-only">Toggle menu</span>
                 </Button>

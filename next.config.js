@@ -4,6 +4,12 @@ const nextConfig = {
   distDir: 'out',
   images: {
     unoptimized: true, // For static export
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'ext.same-assets.com',
+      },
+    ],
   },
   typescript: {
     ignoreBuildErrors: true,

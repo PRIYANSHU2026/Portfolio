@@ -14,13 +14,7 @@ export function generateStaticParams() {
   }));
 }
 
-interface ProductPageProps {
-  params: {
-    id: string;
-  };
-}
-
-export default function ProductPage({ params }: ProductPageProps) {
+export default function ProductPage({ params }: { params: { id: string } }) {
   const product = products.find((p) => p.id === params.id);
 
   // If product not found, return 404
@@ -107,6 +101,8 @@ export default function ProductPage({ params }: ProductPageProps) {
                 </div>
                 <span className="text-sm text-gray-500">4.0 (12 reviews)</span>
               </div>
+
+              <div className="text-2xl font-bold text-red-600 mb-6">{formatPrice(product.price)}</div>
 
               <p className="text-gray-600 mb-6">{product.description}</p>
 
@@ -243,6 +239,9 @@ export default function ProductPage({ params }: ProductPageProps) {
                     <h3 className="mt-4 font-medium text-gray-800 group-hover:text-red-600 transition-colors line-clamp-2">
                       {relatedProduct.name}
                     </h3>
+                    <p className="mt-1 text-red-600 font-semibold">
+                      {formatPrice(relatedProduct.price)}
+                    </p>
                   </Link>
                 </div>
               ))}
